@@ -1,5 +1,6 @@
 package Bioinformatics;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,6 +15,7 @@ public class SequenceGenerator {
     int k;
     double p;
     String fileName;
+    CommonUtilities commonUtilities;
 
     public SequenceGenerator(int n, int a, int c, int g, int t, int k, double p, String fileName) {
         this.n = n;
@@ -26,16 +28,17 @@ public class SequenceGenerator {
         this.fileName = fileName;
     }
 
-    public static void main(String[] args) {
-        SequenceGenerator sequenceGenerator = new SequenceGenerator(10000, 25,25, 25, 25, 10, 0.1, "output_file");
-        sequenceGenerator.executeSequenceGenerator(sequenceGenerator.n, sequenceGenerator.k);
+    public static void main(String[] args) throws IOException {
+        SequenceGenerator sequenceGenerator = new SequenceGenerator(10000, 25,25, 25, 25, 10, 0.1, "output_file.txt");
+        sequenceGenerator.executeSequenceGenerator(sequenceGenerator.n, sequenceGenerator.k, sequenceGenerator.fileName);
     }
 
-    private void executeSequenceGenerator(int sequenceLength, int noOfSequences){
+    private void executeSequenceGenerator(int sequenceLength, int noOfSequences, String outputFileName) throws IOException {
 
-        List<StringBuilder> resultantSequences = new ArrayList<>();
+        List<String> resultantSequences = new ArrayList<>();
         StringBuilder masterSequence = new StringBuilder();
         Random randomNoGeneration = new Random();
+        commonUtilities = new CommonUtilities();
 
         //1st iteration
         int masterSequenceCounter = 0;
@@ -66,9 +69,10 @@ public class SequenceGenerator {
             }
             sequenceCounter++;
             System.out.println("subsequentSequence: "+subsequentSequence);
-            resultantSequences.add(subsequentSequence);
+            resultantSequences.add(subsequentSequence.toString());
         }
-        writeToOutputFile(resultantSequences);
+        //writeToOutputFile(resultantSequences);
+        commonUtilities.writeToFile(outputFileName, resultantSequences);
     }
 
     private char chooseRandomLetter(float randomnessIndex){

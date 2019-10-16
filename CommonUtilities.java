@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class CommonUtilities {
 
-    private List<String> readFromFile(String inputFileName) throws FileNotFoundException {
+    public List<String> readFromFile(String inputFileName) throws FileNotFoundException {
         Scanner scanner = new Scanner(new File(inputFileName));
         scanner.useDelimiter(" ");
 
@@ -20,7 +20,7 @@ public class CommonUtilities {
         return sequenceCollector;
     }
 
-    private void writeToFile(String outputFileName, List<String> outputToFile) throws IOException {
+    public void writeToFile(String outputFileName, List<String> outputToFile) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(outputFileName));
 
         Iterator iterator = outputToFile.iterator();

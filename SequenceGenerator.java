@@ -29,8 +29,17 @@ public class SequenceGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        SequenceGenerator sequenceGenerator = new SequenceGenerator(10000, 25,25, 25, 25, 10, 0.1, "output_file.txt");
+        SequenceGenerator sequenceGenerator = new SequenceGenerator(10000, 25,25, 25, 25, 10, 0.1, "first_output.txt");
         sequenceGenerator.executeSequenceGenerator(sequenceGenerator.n, sequenceGenerator.k, sequenceGenerator.fileName);
+    }
+
+    private void calculateProportionACGT(int a, int c, int g, int t){
+        int total = a+c+g+t;
+        float proportionA = a/total;
+        float proportionC = c/total;
+        float proportionG = g/total;
+        float proportionT = t/total;
+
     }
 
     private void executeSequenceGenerator(int sequenceLength, int noOfSequences, String outputFileName) throws IOException {
@@ -47,7 +56,7 @@ public class SequenceGenerator {
             masterSequence.append(chooseRandomLetter(randomIndex));
             masterSequenceCounter++;
         }
-        System.out.println("masterSequence: "+masterSequence);
+        commonUtilities.writeToFileOnGenerating(outputFileName, masterSequence.toString(), 1);
 
         //2nd iteration
         int sequenceCounter = 1;
@@ -68,11 +77,11 @@ public class SequenceGenerator {
                 subsequentSequenceCounter++;
             }
             sequenceCounter++;
-            System.out.println("subsequentSequence: "+subsequentSequence);
+
+            //write rest of sequences to file here
+            commonUtilities.writeToFileOnGenerating(outputFileName, subsequentSequence.toString(), subsequentSequenceCounter);
             resultantSequences.add(subsequentSequence.toString());
         }
-        //writeToOutputFile(resultantSequences);
-        commonUtilities.writeToFile(outputFileName, resultantSequences);
     }
 
     private char chooseRandomLetter(float randomnessIndex){
@@ -99,9 +108,5 @@ public class SequenceGenerator {
 
     private void performDelete(int currentIndex, StringBuilder permutedString){
         permutedString.deleteCharAt(currentIndex);
-    }
-
-    private void writeToOutputFile(List<StringBuilder> resultantSequences){
-        //logic to write to file
     }
 }

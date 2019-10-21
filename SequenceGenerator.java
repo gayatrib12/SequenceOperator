@@ -16,7 +16,12 @@ public class SequenceGenerator {
     int total;
     double p;
     String fileName;
-    CommonUtilities commonUtilities;
+
+    float propA;
+    float propC;
+    float propG;
+    float propT;
+    // CommonUtilities commonUtilities;
 
     public SequenceGenerator(int n, int a, int c, int g, int t, int k, double p, String fileName) {
         this.n = n;
@@ -28,6 +33,8 @@ public class SequenceGenerator {
         this.p = p;
         this.fileName = fileName;
         this.total = a + g + c + t;
+        calculateProportionACGT();
+
     }
 
     public static void main(String[] args) throws IOException {
@@ -35,14 +42,12 @@ public class SequenceGenerator {
         sequenceGenerator.executeSequenceGenerator(sequenceGenerator.n, sequenceGenerator.k, sequenceGenerator.fileName);
     }
 
-    /*private void calculateProportionACGT(int a, int c, int g, int t){
-        int total = a+c+g+t;
-        float proportionA = a/total;
-        float proportionC = c/total;
-        float proportionG = g/total;
-        float proportionT = t/total;
-
-    }*/
+    private void calculateProportionACGT(){
+        this.propA = (float) this.a/this.total;
+        this.propC = propA + (float) this.c/this.total;
+        this.propG = propC + (float) this.a/this.total;
+        this.propT = propG + (float) this.a/this.total;
+    }
 
     // As the arguments for this method are already present as the class variables, should we remove them?
     private void executeSequenceGenerator(int sequenceLength, int noOfSequences, String outputFileName) throws IOException {
@@ -50,7 +55,7 @@ public class SequenceGenerator {
         List<String> resultantSequences = new ArrayList<>();
         StringBuilder masterSequence = new StringBuilder();
         Random randomNoGeneration = new Random();
-        commonUtilities = new CommonUtilities();
+        // commonUtilities = new CommonUtilities();
 
         //1st iteration
         int masterSequenceCounter = 0;
@@ -59,7 +64,7 @@ public class SequenceGenerator {
             masterSequence.append(chooseRandomLetter(randomIndex));
             masterSequenceCounter++;
         }
-        commonUtilities.writeToFileOnGenerating(outputFileName, masterSequence.toString(), 1);
+        CommonUtilities.writeToFileOnGenerating(outputFileName, masterSequence.toString(), 1);
 
         //2nd iteration
         int sequenceCounter = 1;
@@ -89,18 +94,18 @@ public class SequenceGenerator {
             sequenceCounter++;
 
             //write rest of sequences to file here
-            commonUtilities.writeToFileOnGenerating(outputFileName, subsequentSequence.toString(), subsequentSequenceCounter);
+            CommonUtilities.writeToFileOnGenerating(outputFileName, subsequentSequence.toString(), subsequentSequenceCounter);
             resultantSequences.add(subsequentSequence.toString());
         }
     }
 
     private char chooseRandomLetter(float randomnessIndex){
         // I guess you missed to add these. So, I have changed.
-        if(randomnessIndex >= 0 && randomnessIndex <= a/total)
+        if(randomnessIndex >= 0 && randomnessIndex <= this.propA)
             return 'A';
-        else if(randomnessIndex > a/total && randomnessIndex <= c/total)
+        else if(randomnessIndex > this.propA && randomnessIndex <= this.propC)
             return 'C';
-        else if(randomnessIndex > c/total && randomnessIndex <= g/total)
+        else if(randomnessIndex > this.propC && randomnessIndex <= this.propG)
             return 'G';
         else
             return 'T';

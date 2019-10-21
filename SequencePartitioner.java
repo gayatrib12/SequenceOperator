@@ -10,7 +10,7 @@ public class SequencePartitioner {
     int minSequenceRange;
     int maxSequenceRange;
     String outputFile;
-    // CommonUtilities commonUtilities;
+    CommonUtilities commonUtilities;
 
     public SequencePartitioner(String inputFile, int minSequenceRange, int maxSequenceRange, String outputFile) {
         this.inputFile = inputFile;
@@ -21,15 +21,13 @@ public class SequencePartitioner {
 
     public static void main(String[] args) throws IOException {
         SequencePartitioner sequencePartitioner = new SequencePartitioner("first_output.txt", 100, 150, "second_output.txt");
-        
-        // Aren't the arguments to the method redundant
         sequencePartitioner.partitionSequences(sequencePartitioner.inputFile, sequencePartitioner.outputFile, sequencePartitioner.minSequenceRange, sequencePartitioner.maxSequenceRange);
     }
 
     private void partitionSequences(String inputFileName, String outputFile, int minSequenceRange, int maxSequenceRange) throws IOException {
         List<String> partitionedSequence = new ArrayList<>();
-        
-        List<String> splitSequence = CommonUtilities.readFromFileToPartition(inputFileName);
+        commonUtilities = new CommonUtilities();
+        List<String> splitSequence = commonUtilities.readFromFileToPartition(inputFileName);
 
         for(String sequence : splitSequence){
             int currentSequenceIndex = 0;
@@ -46,7 +44,7 @@ public class SequencePartitioner {
         }
 
         //write to file here
-        CommonUtilities.writeToFileOnPartitioning(outputFile, partitionedSequence);
+        commonUtilities.writeToFileOnPartitioning(outputFile, partitionedSequence);
         return;
     }
 }

@@ -6,13 +6,12 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-// Making the helper class static
-public static class CommonUtilities {
+public class CommonUtilities {
 
-    static int partitionDiem = 78;
-    static String fileLengthSpecifier = "%0$-78s";
+    int partitionDiem = 78;
+    String fileLengthSpecifier = "%0$-78s";
 
-    public static List<String> readFromFileToPartition(String inputFileName) throws IOException {
+    public List<String> readFromFileToPartition(String inputFileName) throws IOException {
 
         File file = new File(inputFileName);
         List<String> fileLinesList = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
@@ -33,12 +32,12 @@ public static class CommonUtilities {
         return fileStringsToPartition;
     }
 
-    public static List<String> readFromFileToAssemble(String inputFileName) throws FileNotFoundException{
+    public List<String> readFromFileToAssemble(String inputFileName) throws FileNotFoundException{
 
         return null;
     }
 
-    public static void writeToFileOnGenerating(String outputFileName, String outputToFile, int lineCount) throws IOException {
+    public void writeToFileOnGenerating(String outputFileName, String outputToFile, int lineCount) throws IOException {
 
         try (FileWriter fileWriter = new FileWriter(outputFileName, true);
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -64,7 +63,7 @@ public static class CommonUtilities {
         return;
     }
 
-    public static void writeToFileOnPartitioning(String outputFileName, List<String> outputToFile) throws IOException {
+    public void writeToFileOnPartitioning(String outputFileName, List<String> outputToFile) throws IOException {
         try (FileWriter fileWriter = new FileWriter(outputFileName, true);
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
              PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
@@ -88,6 +87,6 @@ public static class CommonUtilities {
         return;
     }
 
-    public static void writeToFileOnAssembling(String outputFileName, String outputToFile, int lineCount) throws IOException {
+    public void writeToFileOnAssembling(String outputFileName, String outputToFile, int lineCount) throws IOException {
     }
 }

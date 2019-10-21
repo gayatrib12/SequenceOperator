@@ -13,7 +13,6 @@ public class SequenceGenerator {
     int g;
     int t;
     int k;
-    int total;
     double p;
     String fileName;
     CommonUtilities commonUtilities;
@@ -27,7 +26,6 @@ public class SequenceGenerator {
         this.k = k;
         this.p = p;
         this.fileName = fileName;
-        this.total = a + g + c + t;
     }
 
     public static void main(String[] args) throws IOException {
@@ -35,16 +33,15 @@ public class SequenceGenerator {
         sequenceGenerator.executeSequenceGenerator(sequenceGenerator.n, sequenceGenerator.k, sequenceGenerator.fileName);
     }
 
-    /*private void calculateProportionACGT(int a, int c, int g, int t){
+    private void calculateProportionACGT(int a, int c, int g, int t){
         int total = a+c+g+t;
         float proportionA = a/total;
         float proportionC = c/total;
         float proportionG = g/total;
         float proportionT = t/total;
 
-    }*/
+    }
 
-    // As the arguments for this method are already present as the class variables, should we remove them?
     private void executeSequenceGenerator(int sequenceLength, int noOfSequences, String outputFileName) throws IOException {
 
         List<String> resultantSequences = new ArrayList<>();
@@ -68,15 +65,8 @@ public class SequenceGenerator {
 
             int subsequentSequenceCounter = 0;
             while(subsequentSequenceCounter < subsequentSequence.length()){
-
-                // The document says
-                // The next k−1 sequences will be a copy of the first sequence, but each letter will be 
-                // mutated with replace or delete with probability p.
-
-                // Which means, to be either delete or replace - it is probability p and between delete and replace, he did not mention the 
-                // probability, so I guess it should be 0.5
-                if(decideOperation(randomNoGeneration.nextFloat(), this.p)) {
-                    if(decideOperation(randomNoGeneration.nextFloat(), 0.5)){
+                if(decideOperation(randomNoGeneration.nextFloat())) {
+                    if(decideOperation(randomNoGeneration.nextFloat())){
                         //if replace
                         performReplace(randomNoGeneration.nextFloat(), subsequentSequence, subsequentSequenceCounter);
                     }else{
@@ -95,19 +85,18 @@ public class SequenceGenerator {
     }
 
     private char chooseRandomLetter(float randomnessIndex){
-        // I guess you missed to add these. So, I have changed.
-        if(randomnessIndex >= 0 && randomnessIndex <= a/total)
+        if(randomnessIndex >= 0 && randomnessIndex <= 0.25)
             return 'A';
-        else if(randomnessIndex > a/total && randomnessIndex <= c/total)
+        else if(randomnessIndex > 0.25 && randomnessIndex <= 0.5)
             return 'C';
-        else if(randomnessIndex > c/total && randomnessIndex <= g/total)
+        else if(randomnessIndex > 0.5 && randomnessIndex <= 0.75)
             return 'G';
         else
             return 'T';
     }
 
-    private boolean decideOperation(float randomnessIndex, double p){
-        if(randomnessIndex <= p)
+    private boolean decideOperation(float randomnessIndex){
+        if(randomnessIndex <= 0.5)
             return true;
         else
             return false;

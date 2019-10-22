@@ -10,6 +10,7 @@ public class CommonUtilities {
 
     int partitionDiem = 78;
     String fileLengthSpecifier = "%0$-78s";
+    String fastaFormatSpecifier = ">pns_gb";
 
     public List<String> readFromFileToPartition(String inputFileName) throws IOException {
 
@@ -19,22 +20,31 @@ public class CommonUtilities {
         StringBuilder partitionText = new StringBuilder();
 
         for(String line : fileLinesList) {
-            if(line.contains(">gpbs"))
-                continue;
-
-            if (line.trim().isEmpty()) {
+            if(line.trim().contains(fastaFormatSpecifier)) {
                 fileStringsToPartition.add(partitionText.toString());
                 partitionText.setLength(0);
+                continue;
             }
-            else
-                partitionText.append(line);
+
+            partitionText.append(line);
         }
+        fileStringsToPartition.remove(0);
         return fileStringsToPartition;
     }
 
-    public List<String> readFromFileToAssemble(String inputFileName) throws FileNotFoundException{
+    public List<String> readFromFileToAssemble(String inputFileName) throws IOException {
 
-        return null;
+        File file = new File(inputFileName);
+        List<String> fileLinesList = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+        List<String> fileStringsToPartition = new ArrayList<>();
+
+        for(String line : fileLinesList) {
+            if(line.trim().contains(fastaFormatSpecifier))
+                continue;
+
+            fileStringsToPartition.add(line);
+        }
+        return fileStringsToPartition;
     }
 
     public void writeToFileOnGenerating(String outputFileName, String outputToFile, int lineCount) throws IOException {
@@ -43,9 +53,7 @@ public class CommonUtilities {
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
              PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
 
-            if (lineCount == 1) {
-                printWriter.println(String.format(fileLengthSpecifier, ">gpbs sequence operations being performed"));
-            }
+            printWriter.println(String.format(fileLengthSpecifier, fastaFormatSpecifier));
 
             for (int i = 0; i < outputToFile.length(); ) {
                 if ((outputToFile.length() - i) < partitionDiem) {
@@ -68,19 +76,18 @@ public class CommonUtilities {
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
              PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
 
-            printWriter.println(String.format(fileLengthSpecifier, ">gpbs sequence operations being performed"));
-
+            printWriter.println(String.format(fileLengthSpecifier, fastaFormatSpecifier));
             for(String line:outputToFile) {
                 for (int i = 0; i < line.length(); ) {
                     if ((line.length() - i) < partitionDiem) {
                         printWriter.println(String.format(fileLengthSpecifier, line.substring(i, line.length())));
+                        printWriter.println(String.format(fileLengthSpecifier, fastaFormatSpecifier));
                     } else {
                         printWriter.println(String.format(fileLengthSpecifier, line.substring(i, i + partitionDiem)));
                     }
                     i += partitionDiem;
                 }
             }
-            bufferedWriter.newLine();
         } catch (IOException e) {
             System.err.println(String.format("Problem writing to the file %s", outputFileName));
         }

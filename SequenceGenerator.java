@@ -16,6 +16,10 @@ public class SequenceGenerator {
     double p;
     String fileName;
     CommonUtilities commonUtilities;
+    float proportionA;
+    float proportionC;
+    float proportionG;
+    Random randomNoGeneration;
 
     public SequenceGenerator(int n, int a, int c, int g, int t, int k, double p, String fileName) {
         this.n = n;
@@ -30,23 +34,22 @@ public class SequenceGenerator {
 
     public static void main(String[] args) throws IOException {
         SequenceGenerator sequenceGenerator = new SequenceGenerator(10000, 25,25, 25, 25, 10, 0.1, "first_output.txt");
+        sequenceGenerator.calculateProportionACGT(sequenceGenerator.a, sequenceGenerator.c, sequenceGenerator.g, sequenceGenerator.t);
         sequenceGenerator.executeSequenceGenerator(sequenceGenerator.n, sequenceGenerator.k, sequenceGenerator.fileName);
     }
 
     private void calculateProportionACGT(int a, int c, int g, int t){
         int total = a+c+g+t;
-        float proportionA = a/total;
-        float proportionC = c/total;
-        float proportionG = g/total;
-        float proportionT = t/total;
-
+        this.proportionA = (float)a/total;
+        this.proportionC = (float)c/total + this.proportionA;
+        this.proportionG = (float)g/total + this.proportionC;
     }
 
     private void executeSequenceGenerator(int sequenceLength, int noOfSequences, String outputFileName) throws IOException {
 
         List<String> resultantSequences = new ArrayList<>();
         StringBuilder masterSequence = new StringBuilder();
-        Random randomNoGeneration = new Random();
+        randomNoGeneration = new Random();
         commonUtilities = new CommonUtilities();
 
         //1st iteration
@@ -58,10 +61,11 @@ public class SequenceGenerator {
         }
         commonUtilities.writeToFileOnGenerating(outputFileName, masterSequence.toString(), 1);
 
-        //2nd iteration
+        //subsequent iterations
         int sequenceCounter = 1;
         while(sequenceCounter < noOfSequences){
-            StringBuilder subsequentSequence = masterSequence;
+
+            StringBuilder subsequentSequence = new StringBuilder().append(masterSequence.toString());
 
             int subsequentSequenceCounter = 0;
             while(subsequentSequenceCounter < subsequentSequence.length()){
@@ -85,25 +89,31 @@ public class SequenceGenerator {
     }
 
     private char chooseRandomLetter(float randomnessIndex){
-        if(randomnessIndex >= 0 && randomnessIndex <= 0.25)
+        if(randomnessIndex >= 0 && randomnessIndex <= this.proportionA)
             return 'A';
-        else if(randomnessIndex > 0.25 && randomnessIndex <= 0.5)
+        else if(randomnessIndex > this.proportionA && randomnessIndex <= this.proportionC)
             return 'C';
-        else if(randomnessIndex > 0.5 && randomnessIndex <= 0.75)
+        else if(randomnessIndex > this.proportionC && randomnessIndex <= this.proportionG)
             return 'G';
         else
             return 'T';
     }
 
     private boolean decideOperation(float randomnessIndex){
-        if(randomnessIndex <= 0.5)
+        if(randomnessIndex <= p)
             return true;
         else
             return false;
     }
 
     private void performReplace(float replacementIndex, StringBuilder permutedString, int currentIndex){
-        permutedString.setCharAt(currentIndex, chooseRandomLetter(replacementIndex));
+
+        if(permutedString.charAt(currentIndex) != chooseRandomLetter(replacementIndex)){
+            permutedString.setCharAt(currentIndex, chooseRandomLetter(replacementIndex));
+            return;
+        }
+
+        performReplace(randomNoGeneration.nextFloat(), permutedString, currentIndex);
     }
 
     private void performDelete(int currentIndex, StringBuilder permutedString){

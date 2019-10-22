@@ -1,4 +1,4 @@
-package Bioinformatics;
+//package Bioinformatics;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +33,9 @@ public class SequenceGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        SequenceGenerator sequenceGenerator = new SequenceGenerator(10000, 25,25, 25, 25, 10, 0.1, "first_output.txt");
+        //SequenceGenerator sequenceGenerator = new SequenceGenerator(10000, 25,25, 25, 25, 10, 0.1, "first_output.txt");
+        SequenceGenerator sequenceGenerator = new SequenceGenerator(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),
+         Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Float.parseFloat(args[6]), args[7]);
         sequenceGenerator.calculateProportionACGT(sequenceGenerator.a, sequenceGenerator.c, sequenceGenerator.g, sequenceGenerator.t);
         sequenceGenerator.executeSequenceGenerator(sequenceGenerator.n, sequenceGenerator.k, sequenceGenerator.fileName);
     }
@@ -68,9 +70,9 @@ public class SequenceGenerator {
             StringBuilder subsequentSequence = new StringBuilder().append(masterSequence.toString());
 
             int subsequentSequenceCounter = 0;
-            while(subsequentSequenceCounter < subsequentSequence.length()){
-                if(decideOperation(randomNoGeneration.nextFloat())) {
-                    if(decideOperation(randomNoGeneration.nextFloat())){
+            while(subsequentSequenceCounter < masterSequence.length()){
+                if(decideOperation(randomNoGeneration.nextFloat(), (float)this.p)) {
+                    if(decideOperation(randomNoGeneration.nextFloat(), (float)0.5)){
                         //if replace
                         performReplace(randomNoGeneration.nextFloat(), subsequentSequence, subsequentSequenceCounter);
                     }else{
@@ -83,7 +85,7 @@ public class SequenceGenerator {
             sequenceCounter++;
 
             //write rest of sequences to file here
-            commonUtilities.writeToFileOnGenerating(outputFileName, subsequentSequence.toString(), subsequentSequenceCounter);
+            commonUtilities.writeToFileOnGenerating(outputFileName, subsequentSequence.toString().replaceAll("_", ""), subsequentSequenceCounter);
             resultantSequences.add(subsequentSequence.toString());
         }
     }
@@ -99,8 +101,8 @@ public class SequenceGenerator {
             return 'T';
     }
 
-    private boolean decideOperation(float randomnessIndex){
-        if(randomnessIndex <= p)
+    private boolean decideOperation(float randomnessIndex, float pr){
+        if(randomnessIndex <= pr)
             return true;
         else
             return false;
@@ -117,6 +119,6 @@ public class SequenceGenerator {
     }
 
     private void performDelete(int currentIndex, StringBuilder permutedString){
-        permutedString.deleteCharAt(currentIndex);
+        permutedString.replace(currentIndex, currentIndex+1,"_");
     }
 }

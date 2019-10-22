@@ -1,4 +1,4 @@
-package Bioinformatics;
+//package Bioinformatics;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -37,10 +37,21 @@ public class CommonUtilities {
         File file = new File(inputFileName);
         List<String> fileLinesList = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
         List<String> fileStringsToPartition = new ArrayList<>();
+        StringBuilder partitionText = new StringBuilder();
 
         for(String line : fileLinesList) {
             if(line.trim().contains(fastaFormatSpecifier))
                 continue;
+
+            if(line.trim().isEmpty())
+            {
+                fileStringsToPartition.add(partitionText.toString());
+                partitionText.setLength(0);
+            }
+            else
+            {
+                partitionText.append(line);
+            }
 
             fileStringsToPartition.add(line);
         }

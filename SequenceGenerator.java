@@ -66,7 +66,6 @@ public class SequenceGenerator {
         //subsequent iterations
         int sequenceCounter = 1;
         while(sequenceCounter < noOfSequences){
-
             StringBuilder subsequentSequence = new StringBuilder().append(masterSequence.toString());
 
             int subsequentSequenceCounter = 0;
@@ -109,11 +108,11 @@ public class SequenceGenerator {
     }
 
     private void performReplace(float replacementIndex, StringBuilder permutedString, int currentIndex){
-
-        if(permutedString.charAt(currentIndex) != chooseRandomLetter(replacementIndex)){
+        permutedString.setCharAt(currentIndex, chooseRandomLetter(replacementIndex));
+        /*if(permutedString.charAt(currentIndex) != chooseRandomLetter(replacementIndex)){
             permutedString.setCharAt(currentIndex, chooseRandomLetter(replacementIndex));
             return;
-        }
+        }*/
 
         performReplace(randomNoGeneration.nextFloat(), permutedString, currentIndex);
     }

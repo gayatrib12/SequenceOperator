@@ -45,7 +45,6 @@ public class SequenceAssembler {
     public void assemble(List<String> fragments) throws IOException
     {
         while(fragments.size() > 1) {
-            System.out.println("Hell with this");
         	Result result = calculateAlignment(fragments.get(0), fragments);
         	if(result.score > 0) {
         		fragments.remove(result.arrayIndex);

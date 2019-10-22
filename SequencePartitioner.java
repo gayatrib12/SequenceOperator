@@ -36,8 +36,8 @@ public class SequencePartitioner {
             while(currentSequenceIndex < sequence.length()) {
                 int randomNum = (int) (Math.random() * ((maxSequenceRange - minSequenceRange) + 1)) + minSequenceRange;
                 //if(randomNum >= minSequenceRange && randomNum <= maxSequenceRange) {
-                    if (randomNum <= (sequence.length() - currentSequenceIndex) + 1) {
-                        partitionedSequence.add(sequence.substring(currentSequenceIndex, (currentSequenceIndex + randomNum) - 1));
+                    if (randomNum <= (sequence.length() - currentSequenceIndex)) {
+                        partitionedSequence.add(sequence.substring(currentSequenceIndex, currentSequenceIndex + randomNum));
                         currentSequenceIndex += (randomNum);
                     }
                     else

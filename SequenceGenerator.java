@@ -108,11 +108,11 @@ public class SequenceGenerator {
     }
 
     private void performReplace(float replacementIndex, StringBuilder permutedString, int currentIndex){
-        permutedString.setCharAt(currentIndex, chooseRandomLetter(replacementIndex));
-        /*if(permutedString.charAt(currentIndex) != chooseRandomLetter(replacementIndex)){
+
+        if(permutedString.charAt(currentIndex) != chooseRandomLetter(replacementIndex)){
             permutedString.setCharAt(currentIndex, chooseRandomLetter(replacementIndex));
             return;
-        }*/
+        }
 
         performReplace(randomNoGeneration.nextFloat(), permutedString, currentIndex);
     }

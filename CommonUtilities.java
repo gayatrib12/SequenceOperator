@@ -25,7 +25,6 @@ public class CommonUtilities {
                 partitionText.setLength(0);
                 continue;
             }
-
             partitionText.append(line);
         }
         fileStringsToPartition.remove(0);
@@ -52,8 +51,6 @@ public class CommonUtilities {
             {
                 partitionText.append(line);
             }
-
-            //fileStringsToPartition.add(line);
         }
 
 
@@ -96,12 +93,13 @@ public class CommonUtilities {
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
              PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
 
-            printWriter.println(String.format(fileLengthSpecifier, fastaFormatSpecifier));
             for(String line:outputToFile) {
+                printWriter.println(String.format(fileLengthSpecifier, fastaFormatSpecifier));
+
                 for (int i = 0; i < line.length(); ) {
                     if ((line.length() - i) < partitionDiem) {
                         printWriter.println(String.format(fileLengthSpecifier, line.substring(i, line.length())));
-                        printWriter.println(String.format(fileLengthSpecifier, fastaFormatSpecifier));
+                        // printWriter.println(String.format(fileLengthSpecifier, fastaFormatSpecifier));
                     } else {
                         printWriter.println(String.format(fileLengthSpecifier, line.substring(i, i + partitionDiem)));
                     }

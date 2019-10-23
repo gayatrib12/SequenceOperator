@@ -53,9 +53,18 @@ public class CommonUtilities {
                 partitionText.append(line);
             }
 
-            fileStringsToPartition.add(line);
+            //fileStringsToPartition.add(line);
         }
-        return fileStringsToPartition;
+
+
+        List<String> result = new ArrayList<>();
+        for(String line: fileStringsToPartition)
+        {
+            line = line.trim();
+            if(!line.isEmpty())
+                result.add(line);
+        }
+        return result;
     }
 
     public void writeToFileOnGenerating(String outputFileName, String outputToFile, int lineCount) throws IOException {
@@ -76,6 +85,7 @@ public class CommonUtilities {
                 i += partitionDiem;
             }
             bufferedWriter.newLine();
+            printWriter.close();
         } catch (IOException e) {
             System.err.println(String.format("Problem writing to the file %s", outputFileName));
         }
@@ -98,6 +108,7 @@ public class CommonUtilities {
                     }
                     i += partitionDiem;
                 }
+                bufferedWriter.newLine();
             }
         } catch (IOException e) {
             System.err.println(String.format("Problem writing to the file %s", outputFileName));

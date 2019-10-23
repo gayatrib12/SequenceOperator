@@ -12,6 +12,7 @@ public class SequenceAssembler {
     String outputFile;
     CommonUtilities commonUtilities;
 
+	//Result class to get the score for an alignment of the fragments, the aligned string and the Index of the fragment in the list
      public class Result {
     	int score;
     	String mergedString;
@@ -41,13 +42,18 @@ public class SequenceAssembler {
 
     public void assemble(List<String> fragments) throws IOException
     {
+		// While there are more than 1 fragments in the list, find the fragment pair with the maximum score and merge the fragments.
         while(fragments.size() > 1) {
-        	Result result = MergeFirstSequence(fragments.get(0), fragments);
+			// Get the fragment with the maximum alignment score
+			Result result = MergeFirstSequence(fragments.get(0), fragments);
+			// Merge the fragment and remove the later from the list
         	if(result.score > 0) {
         		fragments.remove(result.arrayIndex);
                 fragments.remove(0);
         		fragments.add(0,result.mergedString);
-        	} else {
+			}
+			// If no pair has a positive score, then break 
+			else {
         		break;
         	}
         }
@@ -55,14 +61,25 @@ public class SequenceAssembler {
         commonUtilities.writeToFileOnGenerating(outputFile, fragments.get(0), 1);
     }
 
+	/**
+	 * Given a fragment and a list of fragments, find the fragment with the maximum alignment score
+	 * @param fragment
+	 * @param fragmentList
+	 * @return
+	 */
     public Result MergeFirstSequence(String fragment, List<String> fragmentList) {
 		Result result = new Result();
     	result.score = 0;
 		
+		// For each fragment in the list starting from 1
     	for(int i=1; i<fragmentList.size(); i++) {
-            Result r1 = getDoveTailMergeResult(fragment, fragmentList.get(i));
+			// Get the alignment of suffix of fragment with the prefix of the ith fragment
+			Result r1 = getDoveTailMergeResult(fragment, fragmentList.get(i));
+			
+			// The alignment score for the vice versa alignment
             Result r2 = getDoveTailMergeResult(fragmentList.get(i), fragment);
 
+			// Get the alignment with the maximum score
             Result temp = r1.score >= r2.score ? r1: r2;
     		if(temp.score > result.score) {
     			result = temp;
@@ -74,45 +91,53 @@ public class SequenceAssembler {
 	}
 
 	
+	/**
+	 * Given two string a and b, get the alignment score
+	 * @param a
+	 * @param b
+	 * @return
+	 */
     public Result getDoveTailMergeResult(String a, String b) {
-    	int[][] arr = new int[a.length() + 1][b.length() + 1];
-    	int j = 1;
+		// Initial matrix of the DP problem
+		int[][] arr = new int[a.length() + 1][b.length() + 1];
+		Result result = new Result();
+		int j = 1;
+
+		// Find the position that first matches between the strings
     	for( ; j <= b.length(); j++) {
     		if(a.charAt(0) == b.charAt(j-1)) {
     			break;
     		}
-    	}
-    	return doveTailResult(arr, 1, j, a, b);
-    }
-    
-    public Result doveTailResult(int[][] arr, int i, int j, String a, String b) {
-    	Result result = new Result();
-    	for(int y = i; y < arr.length; y++) {
+		}
+		
+		// Construct the DP matrix starting from the match
+    	for(int y = 1; y < arr.length; y++) {
     		for(int x = j; x < arr[0].length; x++) {
     			int temp = 0;
     			if(a.charAt(y-1) == b.charAt(x-1))
     				temp = arr[y-1][x-1] + this.matchScore;
     			else 
                     temp = arr[y-1][x-1] + this.replaceScore;
-                    
+                
     			arr[y][x] = Math.max(temp, Math.max(arr[y-1][x] + this.deleteInsertScore, arr[y][x-1] + this.deleteInsertScore));
     		}
     	}
-    	
+		
+		// Given the DP matrix, find the row with the maximim value in the last column
     	int maxScore = -1;
     	int maxScoreIndex = 0;
-    	for(int z=0;z<arr.length;z++) {
-    		if(arr[z][arr[0].length-1] > maxScore) {
-    			maxScore = arr[z][arr[0].length-1];
-    			maxScoreIndex = z;
-    		}
+    	for(int row=0; row < arr.length; row++) {
+    		if(arr[row][arr[0].length-1] > maxScore) {
+    			maxScore = arr[row][arr[0].length-1];
+    			maxScoreIndex = row;
+			}
     	}
 
-    	StringBuffer sb = new StringBuffer();
-    	sb.append(b);
-    	sb.append(a.substring(maxScoreIndex));
-    	result.mergedString = sb.toString();
+    	StringBuffer mergedStringBuffer = new StringBuffer();
+    	mergedStringBuffer.append(b);
+    	mergedStringBuffer.append(a.substring(maxScoreIndex));
+    	result.mergedString = mergedStringBuffer.toString();
     	result.score = arr[maxScoreIndex][arr[0].length - 1];
-    	return result;
+		return result;		
     }
 }

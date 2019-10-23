@@ -37,14 +37,34 @@ public class CommonUtilities {
         File file = new File(inputFileName);
         List<String> fileLinesList = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
         List<String> fileStringsToPartition = new ArrayList<>();
+        StringBuilder partitionText = new StringBuilder();
 
         for(String line : fileLinesList) {
             if(line.trim().contains(fastaFormatSpecifier))
                 continue;
 
-            fileStringsToPartition.add(line);
+            if(line.trim().isEmpty())
+            {
+                fileStringsToPartition.add(partitionText.toString());
+                partitionText.setLength(0);
+            }
+            else
+            {
+                partitionText.append(line);
+            }
+
+            //fileStringsToPartition.add(line);
         }
-        return fileStringsToPartition;
+
+
+        List<String> result = new ArrayList<>();
+        for(String line: fileStringsToPartition)
+        {
+            line = line.trim();
+            if(!line.isEmpty())
+                result.add(line);
+        }
+        return result;
     }
 
     public void writeToFileOnGenerating(String outputFileName, String outputToFile, int lineCount) throws IOException {
@@ -87,6 +107,7 @@ public class CommonUtilities {
                     }
                     i += partitionDiem;
                 }
+                bufferedWriter.newLine();
             }
         } catch (IOException e) {
             System.err.println(String.format("Problem writing to the file %s", outputFileName));

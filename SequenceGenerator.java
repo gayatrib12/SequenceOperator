@@ -68,9 +68,9 @@ public class SequenceGenerator {
             StringBuilder subsequentSequence = new StringBuilder().append(masterSequence.toString());
 
             int subsequentSequenceCounter = 0;
-            while(subsequentSequenceCounter < subsequentSequence.length()){
-                if(decideOperation(randomNoGeneration.nextFloat())) {
-                    if(decideOperation(randomNoGeneration.nextFloat())){
+            while(subsequentSequenceCounter < masterSequence.length()){
+                if(decideOperation(randomNoGeneration.nextFloat(), this.p)) {
+                    if(decideOperation(randomNoGeneration.nextFloat(), 0.5)){
                         //if replace
                         performReplace(randomNoGeneration.nextFloat(), subsequentSequence, subsequentSequenceCounter);
                     }else{
@@ -81,7 +81,7 @@ public class SequenceGenerator {
                 subsequentSequenceCounter++;
             }
             sequenceCounter++;
-            resultantSequences.add(subsequentSequence.toString());
+            resultantSequences.add(subsequentSequence.toString().replaceAll("_", ""));
             //write rest of sequences to file here
             commonUtilities.writeToFileOnGenerating(outputFileName, resultantSequences, subsequentSequenceCounter);
 
@@ -99,8 +99,8 @@ public class SequenceGenerator {
             return 'T';
     }
 
-    private boolean decideOperation(float randomnessIndex){
-        if(randomnessIndex <= p)
+    private boolean decideOperation(float randomnessIndex, double probability){
+        if(randomnessIndex <= probability)
             return true;
         else
             return false;
@@ -117,6 +117,6 @@ public class SequenceGenerator {
     }
 
     private void performDelete(int currentIndex, StringBuilder permutedString){
-        permutedString.deleteCharAt(currentIndex);
+        permutedString.replace(currentIndex, currentIndex + 1, "_");
     }
 }

@@ -1,6 +1,7 @@
 package Bioinformatics;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SequenceAssembler {
@@ -33,8 +34,8 @@ public class SequenceAssembler {
     }
 
     public static void main(String[] args) throws IOException {
-        SequenceAssembler sequenceAssembler = new SequenceAssembler(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), 
-         Integer.parseInt(args[3]), args[4]);
+        SequenceAssembler sequenceAssembler = new SequenceAssembler("second_output.txt", 1, -1,
+         -1, "third_output.txt");
         CommonUtilities commonUtilities = new CommonUtilities();
         List<String> fragments = commonUtilities.readFromFileToAssemble(sequenceAssembler.inputFile);
         sequenceAssembler.assemble(fragments);
@@ -58,7 +59,9 @@ public class SequenceAssembler {
         	}
         }
         CommonUtilities commonUtilities = new CommonUtilities();
-        commonUtilities.writeToFileOnGenerating(outputFile, fragments.get(0), 1);
+        List<String> results = new ArrayList<>();
+        results.add(fragments.get(0));
+        commonUtilities.writeToFileOnGenerating(outputFile, results, 1);
     }
 
 	/**

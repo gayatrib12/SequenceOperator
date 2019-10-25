@@ -59,7 +59,7 @@ public class SequenceGenerator {
             masterSequence.append(chooseRandomLetter(randomIndex));
             masterSequenceCounter++;
         }
-        commonUtilities.writeToFileOnGenerating(outputFileName, masterSequence.toString(), 1);
+        resultantSequences.add(masterSequence.toString());
 
         //subsequent iterations
         int sequenceCounter = 1;
@@ -81,10 +81,10 @@ public class SequenceGenerator {
                 subsequentSequenceCounter++;
             }
             sequenceCounter++;
-
-            //write rest of sequences to file here
-            commonUtilities.writeToFileOnGenerating(outputFileName, subsequentSequence.toString(), subsequentSequenceCounter);
             resultantSequences.add(subsequentSequence.toString());
+            //write rest of sequences to file here
+            commonUtilities.writeToFileOnGenerating(outputFileName, resultantSequences, subsequentSequenceCounter);
+
         }
     }
 

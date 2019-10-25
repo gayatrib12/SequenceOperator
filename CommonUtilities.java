@@ -64,24 +64,26 @@ public class CommonUtilities {
         return result;
     }
 
-    public void writeToFileOnGenerating(String outputFileName, String outputToFile, int lineCount) throws IOException {
+    public void writeToFileOnGenerating(String outputFileName, List<String> outputToFile, int lineCount) throws IOException {
 
-        try (FileWriter fileWriter = new FileWriter(outputFileName, true);
+        try (FileWriter fileWriter = new FileWriter(outputFileName, false);
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
              PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
 
-            printWriter.println(String.format(fileLengthSpecifier, fastaFormatSpecifier));
+            for(String line:outputToFile) {
+                printWriter.println(String.format(fileLengthSpecifier, fastaFormatSpecifier));
 
-            for (int i = 0; i < outputToFile.length(); ) {
-                if ((outputToFile.length() - i) < partitionDiem) {
-                    printWriter.println(String.format(fileLengthSpecifier, outputToFile.substring(i, outputToFile.length())));
-                } else {
-                    //bufferedWriter.write(String.format(fileLengthSpecifier, outputToFile.substring(i, i + partitionDiem)));
-                    printWriter.println(String.format(fileLengthSpecifier, outputToFile.substring(i, i + partitionDiem)));
+                for (int i = 0; i < line.length(); ) {
+                    if ((line.length() - i) < partitionDiem) {
+                        printWriter.println(String.format(fileLengthSpecifier, line.substring(i, line.length())));
+                    } else {
+                        //bufferedWriter.write(String.format(fileLengthSpecifier, outputToFile.substring(i, i + partitionDiem)));
+                        printWriter.println(String.format(fileLengthSpecifier, line.substring(i, i + partitionDiem)));
+                    }
+                    i += partitionDiem;
                 }
-                i += partitionDiem;
+                bufferedWriter.newLine();
             }
-            bufferedWriter.newLine();
         } catch (IOException e) {
             System.err.println(String.format("Problem writing to the file %s", outputFileName));
         }
@@ -89,7 +91,7 @@ public class CommonUtilities {
     }
 
     public void writeToFileOnPartitioning(String outputFileName, List<String> outputToFile) throws IOException {
-        try (FileWriter fileWriter = new FileWriter(outputFileName, true);
+        try (FileWriter fileWriter = new FileWriter(outputFileName, false);
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
              PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
 

@@ -1,4 +1,4 @@
-package Bioinformatics;
+//package Bioinformatics;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,12 +33,13 @@ public class SequenceGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        SequenceGenerator sequenceGenerator = new SequenceGenerator(10000, 25,25, 25, 25, 10, 0.1, "first_output.txt");
+        SequenceGenerator sequenceGenerator = new SequenceGenerator(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),
+         Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Float.parseFloat(args[6]), args[7]);
         sequenceGenerator.calculateProportionACGT(sequenceGenerator.a, sequenceGenerator.c, sequenceGenerator.g, sequenceGenerator.t);
         sequenceGenerator.executeSequenceGenerator(sequenceGenerator.n, sequenceGenerator.k, sequenceGenerator.fileName);
     }
 
-    private void calculateProportionACGT(int a, int c, int g, int t){
+    private void calculateProportionACGT(Integer a, Integer c, Integer g, Integer t){
         int total = a+c+g+t;
         this.proportionA = (float)a/total;
         this.proportionC = (float)c/total + this.proportionA;

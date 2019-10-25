@@ -1,8 +1,8 @@
-package Bioinformatics;
+//package Bioinformatics;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 public class SequenceAssembler {
 
@@ -17,7 +17,8 @@ public class SequenceAssembler {
      public class Result {
     	int score;
     	String mergedString;
-    	int arrayIndex;
+		int arrayIndex;
+		int indexArray;
     	
     	public String toString() {
     		System.out.println("score: " + score + "\n" + "\n" +" mergedString: " + mergedString + "\n" + "arrayIndex: " + arrayIndex);
@@ -34,8 +35,8 @@ public class SequenceAssembler {
     }
 
     public static void main(String[] args) throws IOException {
-        SequenceAssembler sequenceAssembler = new SequenceAssembler("second_output.txt", 1, -1,
-         -1, "third_output.txt");
+        SequenceAssembler sequenceAssembler = new SequenceAssembler(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), 
+         Integer.parseInt(args[3]), args[4]);
         CommonUtilities commonUtilities = new CommonUtilities();
         List<String> fragments = commonUtilities.readFromFileToAssemble(sequenceAssembler.inputFile);
         sequenceAssembler.assemble(fragments);
@@ -44,13 +45,22 @@ public class SequenceAssembler {
     public void assemble(List<String> fragments) throws IOException
     {
 		// While there are more than 1 fragments in the list, find the fragment pair with the maximum score and merge the fragments.
-        while(fragments.size() > 1) {
+		while (fragments.size() > 1) {
+			System.out.println(fragments.size());
 			// Get the fragment with the maximum alignment score
-			Result result = MergeFirstSequence(fragments.get(0), fragments);
+			
+			Result result = MergeSequences(fragments);
+			//System.out.println("Got result: " + Integer.toString(result.arrayIndex) + " " + Integer.toString(result.indexArray));
 			// Merge the fragment and remove the later from the list
         	if(result.score > 0) {
-        		fragments.remove(result.arrayIndex);
-                fragments.remove(0);
+				if (result.arrayIndex > result.indexArray) {
+					fragments.remove(result.arrayIndex);
+					fragments.remove(result.indexArray);
+				}
+				else {
+					fragments.remove(result.indexArray);
+					fragments.remove(result.arrayIndex);
+				}
         		fragments.add(0,result.mergedString);
 			}
 			// If no pair has a positive score, then break 
@@ -58,8 +68,8 @@ public class SequenceAssembler {
         		break;
         	}
         }
-        CommonUtilities commonUtilities = new CommonUtilities();
-        List<String> results = new ArrayList<>();
+		CommonUtilities commonUtilities = new CommonUtilities();
+		List<String> results = new ArrayList<>();
         results.add(fragments.get(0));
         commonUtilities.writeToFileOnGenerating(outputFile, results, 1);
     }
@@ -70,25 +80,28 @@ public class SequenceAssembler {
 	 * @param fragmentList
 	 * @return
 	 */
-    public Result MergeFirstSequence(String fragment, List<String> fragmentList) {
+    public Result MergeSequences(List<String> fragmentList) {
 		Result result = new Result();
     	result.score = 0;
 		
 		// For each fragment in the list starting from 1
-    	for(int i=1; i<fragmentList.size(); i++) {
-			// Get the alignment of suffix of fragment with the prefix of the ith fragment
-			Result r1 = getDoveTailMergeResult(fragment, fragmentList.get(i));
-			
-			// The alignment score for the vice versa alignment
-            Result r2 = getDoveTailMergeResult(fragmentList.get(i), fragment);
+		for (int i = 1; i < fragmentList.size(); i++) {
+			for (int j = i + 1; j < fragmentList.size();j++){
+				// Get the alignment of suffix of fragment with the prefix of the ith fragment
+				Result r1 = getDoveTailMergeResult(fragmentList.get(i), fragmentList.get(j));
+				
+				// The alignment score for the vice versa alignment
+				Result r2 = getDoveTailMergeResult(fragmentList.get(j), fragmentList.get(i));
 
-			// Get the alignment with the maximum score
-            Result temp = r1.score >= r2.score ? r1: r2;
-    		if(temp.score > result.score) {
-    			result = temp;
-    			result.arrayIndex = i;
-    		}
-		}
+				// Get the alignment with the maximum score
+				Result temp = r1.score >= r2.score ? r1: r2;
+				if(temp.score > result.score) {
+					result = temp;
+					result.arrayIndex = i;
+					result.indexArray = j;
+    			}		
+			}
+		}	
 		
 		return result;
 	}

@@ -1,4 +1,4 @@
-package Bioinformatics;
+//package Bioinformatics;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class SequencePartitioner {
     }
 
     public static void main(String[] args) throws IOException {
-        SequencePartitioner sequencePartitioner = new SequencePartitioner("first_output.txt", 100, 150, "second_output.txt");
+        SequencePartitioner sequencePartitioner = new SequencePartitioner(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), args[3]);
         sequencePartitioner.partitionSequences(sequencePartitioner.inputFile, sequencePartitioner.outputFile, sequencePartitioner.minSequenceRange, sequencePartitioner.maxSequenceRange);
     }
 

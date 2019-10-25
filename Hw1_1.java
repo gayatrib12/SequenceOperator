@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class SequenceGenerator {
+public class Hw1_1 {
 
     int n;
     int a;
@@ -21,7 +21,7 @@ public class SequenceGenerator {
     float proportionG;
     Random randomNoGeneration;
 
-    public SequenceGenerator(int n, int a, int c, int g, int t, int k, double p, String fileName) {
+    public Hw1_1(int n, int a, int c, int g, int t, int k, double p, String fileName) {
         this.n = n;
         this.a = a;
         this.c = c;
@@ -33,7 +33,7 @@ public class SequenceGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        SequenceGenerator sequenceGenerator = new SequenceGenerator(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),
+        Hw1_1 sequenceGenerator = new Hw1_1(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),
          Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Float.parseFloat(args[6]), args[7]);
         sequenceGenerator.calculateProportionACGT(sequenceGenerator.a, sequenceGenerator.c, sequenceGenerator.g, sequenceGenerator.t);
         sequenceGenerator.executeSequenceGenerator(sequenceGenerator.n, sequenceGenerator.k, sequenceGenerator.fileName);

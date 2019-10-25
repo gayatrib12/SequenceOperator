@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SequencePartitioner {
+public class Hw1_2 {
 
     String inputFile;
     int minSequenceRange;
@@ -12,7 +12,7 @@ public class SequencePartitioner {
     String outputFile;
     CommonUtilities commonUtilities;
 
-    public SequencePartitioner(String inputFile, int minSequenceRange, int maxSequenceRange, String outputFile) {
+    public Hw1_2(String inputFile, int minSequenceRange, int maxSequenceRange, String outputFile) {
         this.inputFile = inputFile;
         this.minSequenceRange = minSequenceRange;
         this.maxSequenceRange = maxSequenceRange;
@@ -20,7 +20,7 @@ public class SequencePartitioner {
     }
 
     public static void main(String[] args) throws IOException {
-        SequencePartitioner sequencePartitioner = new SequencePartitioner(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), args[3]);
+        Hw1_2 sequencePartitioner = new Hw1_2(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), args[3]);
         sequencePartitioner.partitionSequences(sequencePartitioner.inputFile, sequencePartitioner.outputFile, sequencePartitioner.minSequenceRange, sequencePartitioner.maxSequenceRange);
     }
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
-public class SequenceAssembler {
+public class Hw1_3 {
 
     String inputFile;
     int matchScore;
@@ -26,7 +26,7 @@ public class SequenceAssembler {
     	}
     }
     
-    public SequenceAssembler(String inputFile, int matchScore, int repalceScore, int deleteInsertScore, String outputFile) {
+    public Hw1_3(String inputFile, int matchScore, int repalceScore, int deleteInsertScore, String outputFile) {
         this.inputFile = inputFile;
         this.matchScore = matchScore;
         this.replaceScore = repalceScore;
@@ -35,7 +35,7 @@ public class SequenceAssembler {
     }
 
     public static void main(String[] args) throws IOException {
-        SequenceAssembler sequenceAssembler = new SequenceAssembler(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), 
+        Hw1_3 sequenceAssembler = new Hw1_3(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), 
          Integer.parseInt(args[3]), args[4]);
         CommonUtilities commonUtilities = new CommonUtilities();
         List<String> fragments = commonUtilities.readFromFileToAssemble(sequenceAssembler.inputFile);

@@ -46,7 +46,7 @@ public class SequenceAssembler {
     {
 		// While there are more than 1 fragments in the list, find the fragment pair with the maximum score and merge the fragments.
 		while (fragments.size() > 1) {
-			System.out.println(fragments.size());
+			// System.out.println(fragments.size());
 			// Get the fragment with the maximum alignment score
 			
 			Result result = MergeSequences(fragments);

@@ -18,9 +18,11 @@ public class CommonUtilities {
         List<String> fileLinesList = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
         List<String> fileStringsToPartition = new ArrayList<>();
         StringBuilder partitionText = new StringBuilder();
+        int fastaFormatSpecifierOccurence = 0;
 
-        for(String line : fileLinesList) {
-            if(line.trim().contains(fastaFormatSpecifier)) {
+        for (String line : fileLinesList) {
+            if (line.trim().contains(fastaFormatSpecifier)) {
+                fastaFormatSpecifierOccurence++;
                 fileStringsToPartition.add(partitionText.toString());
                 partitionText.setLength(0);
                 continue;
@@ -28,6 +30,8 @@ public class CommonUtilities {
             partitionText.append(line);
         }
         fileStringsToPartition.remove(0);
+        if(fastaFormatSpecifierOccurence != fileStringsToPartition.size())
+            fileStringsToPartition.add(partitionText.toString());
         return fileStringsToPartition;
     }
 

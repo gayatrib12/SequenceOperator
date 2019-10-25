@@ -84,9 +84,8 @@ public class SequenceGenerator {
             sequenceCounter++;
             resultantSequences.add(subsequentSequence.toString().replaceAll("_", ""));
             //write rest of sequences to file here
-            commonUtilities.writeToFileOnGenerating(outputFileName, resultantSequences, subsequentSequenceCounter);
-
         }
+        commonUtilities.writeToFileOnGenerating(outputFileName, resultantSequences, 0);
     }
 
     private char chooseRandomLetter(float randomnessIndex){

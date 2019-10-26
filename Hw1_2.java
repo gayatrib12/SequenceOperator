@@ -29,17 +29,20 @@ public class Hw1_2 {
         commonUtilities = new CommonUtilities();
         List<String> splitSequence = commonUtilities.readFromFileToPartition(inputFileName);
 
-        for(String sequence : splitSequence){
+        for (String sequence : splitSequence) {
+            sequence = sequence.trim();
             int currentSequenceIndex = 0;
             while(currentSequenceIndex < sequence.length()) {
                 int randomNum = (int) (Math.random() * ((maxSequenceRange - minSequenceRange) + 1)) + minSequenceRange;
-                if(randomNum >= minSequenceRange && randomNum <= maxSequenceRange) {
-                    if (randomNum <= (sequence.length() - currentSequenceIndex) + 1) {
-                        partitionedSequence.add(sequence.substring(currentSequenceIndex, (currentSequenceIndex + randomNum) - 1));
-                        currentSequenceIndex += (randomNum);
-                    }
+                //if(randomNum >= minSequenceRange && randomNum <= maxSequenceRange) {
+                if (randomNum <= (sequence.length() - currentSequenceIndex)) {
+                    partitionedSequence
+                            .add(sequence.substring(currentSequenceIndex, (currentSequenceIndex + randomNum)));
+                    currentSequenceIndex += (randomNum);
                 }
-                currentSequenceIndex++;
+                else
+                    currentSequenceIndex++;
+                //}
             }
         }
 
